@@ -1,0 +1,15 @@
+var express = require('express');
+var router = express.Router();
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('auth/login')
+}
+
+/* GET users listing. */
+router.get('/', ensureAuthenticated, function(req, res, next) {
+  console.log(req.user)
+  res.render('user', { user: req.user });
+});
+
+module.exports = router;
