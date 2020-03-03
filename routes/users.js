@@ -8,7 +8,6 @@ function ensureAuthenticated(req, res, next) {
 
 /* GET users listing. */
 router.get('/', ensureAuthenticated, function(req, res, next) {
-  console.log(req.user)
   res.render('user', { user: req.user });
 });
 

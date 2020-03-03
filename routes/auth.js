@@ -15,26 +15,46 @@ router.get('/logout', function(req, res){
 
 /* FACEBOOK ROUTER */
 router.get('/facebook',
-  passportFacebook.authenticate('facebook')
+(req, res, next) => {
+  const { redirectURL } = req.query;
+  const state = redirectURL
+    ? Buffer.from(JSON.stringify({ redirectURL })).toString('base64') : undefined
+  const authenticator = passportFacebook.authenticate('facebook',  { state })
+  authenticator(req, res, next)
+  }
 );
 
 router.get('/facebook/callback',
   passportFacebook.authenticate("facebook", {
-    successRedirect: "/",
     failureRedirect: "/login"
-  })
+  }),
+  (req, res) => {
+    const { state } = req.query
+    const { redirectURL } = JSON.parse(Buffer.from(state, 'base64').toString())
+    return res.redirect(redirectURL)
+  }
 );
 
 /* GOOGLE ROUTER */
 router.get('/google',
-  passportGoogle.authenticate('google', { scope: ['profile'] })
+  (req, res, next) => {
+    const { redirectURL } = req.query;
+    const state = redirectURL
+      ? Buffer.from(JSON.stringify({ redirectURL })).toString('base64') : undefined
+    const authenticator = passportGoogle.authenticate('google', { scope: ['profile'], state })
+    authenticator(req, res, next)
+  }
 );
 
 router.get('/google/callback',
   passportGoogle.authenticate('google', {
-    successRedirect: "/",
     failureRedirect: "/login"
-  })
+  }),
+  (req, res) => {
+    const { state } = req.query
+    const { redirectURL } = JSON.parse(Buffer.from(state, 'base64').toString())
+    return res.redirect(redirectURL)
+  }
 );
 
 module.exports = router;

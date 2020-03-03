@@ -18,7 +18,7 @@ passport.use(new FacebookStrategy({
       name: first_name + last_name
     };
 
-    await User.update({userid: profile.id}, userData, {upsert: true, setDefaultsOnInsert: true});
+    await User.updateOne({userid: profile.id}, userData, {upsert: true, setDefaultsOnInsert: true});
     done(null, profile);
 }));
 

@@ -10,7 +10,7 @@ passport.use(new GoogleStrategy({
     callbackURL: GOOGLE_CLIENT_CALLBACK || "http://localhost:4000/auth/google/callback"
   },
   async function(accessToken, refreshToken, profile, done) {
-    await User.update({userid: profile.id}, {userid: profile.id, name: profile.displayName}, {upsert: true, setDefaultsOnInsert: true});
+    await User.updateOne({userid: profile.id}, {userid: profile.id, name: profile.displayName}, {upsert: true, setDefaultsOnInsert: true});
     done(null, profile);
   }
 ));

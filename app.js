@@ -18,7 +18,6 @@ mongoose.connect('mongodb://localhost/oauth-test', { useNewUrlParser: true } )
   .catch((err) => console.error(err));
   
 passport.serializeUser(function(user, done) {
-  console.log('serializing the user', user)
   done(null, user);
 });
 
